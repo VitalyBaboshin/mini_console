@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <fstream>
 #include <string>
 #include <Windows.h>
@@ -7,67 +7,70 @@
 using namespace std;
 char ch;
 
-//для преобразования из 16 в 10 сист. счисления
+//РґР»СЏ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ РёР· 16 РІ 10 СЃРёСЃС‚. СЃС‡РёСЃР»РµРЅРёСЏ
 int charToInt(char chr);
 void Initialize(HANDLE hOut);
+
+
 void cls(HANDLE hConsole)
 {
-	COORD coordScreen = { 0, 0 };    // home for the cursor 
+	COORD coordScreen = { 0, 0 };   
 	DWORD cCharsWritten;
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	DWORD dwConSize;
-	// Get the number of character cells in the current buffer. 
+	
 	if (!GetConsoleScreenBufferInfo(hConsole, &csbi))
 	{
 		return;
 	}
 	dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
-	// Fill the entire screen with blanks.
-	if (!FillConsoleOutputCharacter(hConsole,        // Handle to console screen buffer 
-		(TCHAR) ' ',     // Character to write to the buffer
-		dwConSize,       // Number of cells to write 
-		coordScreen,     // Coordinates of first cell 
-		&cCharsWritten))// Receive number of characters written
+	
+	if (!FillConsoleOutputCharacter(hConsole,        
+		(TCHAR) ' ',     
+		dwConSize,       
+		coordScreen,     
+		&cCharsWritten))
 	{
 		return;
 	}
-	// Get the current text attribute.
+
 	if (!GetConsoleScreenBufferInfo(hConsole, &csbi))
 	{
 		return;
 	}
-	// Set the buffer's attributes accordingly.
-	if (!FillConsoleOutputAttribute(hConsole,         // Handle to console screen buffer 
-		csbi.wAttributes, // Character attributes to use
-		dwConSize,        // Number of cells to set attribute 
-		coordScreen,      // Coordinates of first cell 
-		&cCharsWritten)) // Receive number of characters written
+
+	if (!FillConsoleOutputAttribute(hConsole,         
+		csbi.wAttributes, 
+		dwConSize,         
+		coordScreen,      
+		&cCharsWritten)) 
 	{
 		return;
 	}
-	// Put the cursor at its home coordinates.
+
 	SetConsoleCursorPosition(hConsole, coordScreen);
 }
+
 int main(int argc, char **argv)
 {
-	//изменение шрифта и размера окна
-	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);  // получение No. консоли
+	//РёР·РјРµРЅРµРЅРёРµ С€СЂРёС„С‚Р° Рё СЂР°Р·РјРµСЂР° РѕРєРЅР°
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);  // РїРѕР»СѓС‡РµРЅРёРµ No. РєРѕРЅСЃРѕР»Рё
 	CONSOLE_FONT_INFOEX consoleFont;
-	system("mode con cols=250 lines=59"); //размер окна, вывод нужного количества строк в консоль
+	system("mode con cols=250 lines=59"); //СЂР°Р·РјРµСЂ РѕРєРЅР°, РІС‹РІРѕРґ РЅСѓР¶РЅРѕРіРѕ РєРѕР»РёС‡РµСЃС‚РІР° СЃС‚СЂРѕРє РІ РєРѕРЅСЃРѕР»СЊ
 	consoleFont.cbSize = sizeof(CONSOLE_FONT_INFOEX);  // consoleFont.cbSize          = sizeof(consoleFont);
 	consoleFont.dwFontSize.Y = 10; 
 	wcscpy_s(consoleFont.FaceName, L"Lucida Console");
-	SetCurrentConsoleFontEx(hOut, false, &consoleFont);    // установить новый шрифт
+	SetCurrentConsoleFontEx(hOut, false, &consoleFont);    // СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РЅРѕРІС‹Р№ С€СЂРёС„С‚
 
 
 	for (int i = 0; i < rowsCount; i++)			////
-		for (int j = 0; j < columnsCount; j++) { //// Заполняем массив символов пробелами
+		for (int j = 0; j < columnsCount; j++) { //// Р—Р°РїРѕР»РЅСЏРµРј РјР°СЃСЃРёРІ СЃРёРјРІРѕР»РѕРІ РїСЂРѕР±РµР»Р°РјРё
 			buffer[i][j] = ' ';					////
 			bufferColor[i][j] = '7';
 			bufferColorTop[i][j] = '7';
 		}
 
-	//выводим на экран матрицу цветности
+	//РІС‹РІРѕРґРёРј РЅР° СЌРєСЂР°РЅ РјР°С‚СЂРёС†Сѓ С†РІРµС‚РЅРѕСЃС‚Рё
 	/*for (int i = 0; i < rowsCount; i++) {
 		for (int j = 0; j < columnsCount; j++) {
 			SetConsoleTextAttribute(hOut, bufferColor[i][j]-'0');
@@ -130,8 +133,8 @@ int main(int argc, char **argv)
 
 
 
-	////Добавляем дорогу
-	//в буфер из файла матрицу цветов
+	////Р”РѕР±Р°РІР»СЏРµРј РґРѕСЂРѕРіСѓ
+	//РІ Р±СѓС„РµСЂ РёР· С„Р°Р№Р»Р° РјР°С‚СЂРёС†Сѓ С†РІРµС‚РѕРІ
 	ifstream fs1c("roadColor.txt");
 	if (!fs1c.is_open())
 	{
@@ -154,7 +157,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	//накладываем на общий буфер рельеф и цвет
+	//РЅР°РєР»Р°РґС‹РІР°РµРј РЅР° РѕР±С‰РёР№ Р±СѓС„РµСЂ СЂРµР»СЊРµС„ Рё С†РІРµС‚
 	ifstream fs1("road.txt");
 	if (!fs1.is_open())
 	{
@@ -189,7 +192,7 @@ int main(int argc, char **argv)
 
 
 
-	//Добавляем героя на передний план
+	//Р”РѕР±Р°РІР»СЏРµРј РіРµСЂРѕСЏ РЅР° РїРµСЂРµРґРЅРёР№ РїР»Р°РЅ
 	ifstream fs2("1.txt");
 	if (!fs2.is_open())
 	{
@@ -215,7 +218,7 @@ int main(int argc, char **argv)
 	}
 
 	fs2.close();
-	//Добавляем рамку
+	//Р”РѕР±Р°РІР»СЏРµРј СЂР°РјРєСѓ
 
 	for (int j = 0; j < columnsCount; j++) {
 		buffer[0][j] = 178;
@@ -236,7 +239,7 @@ int main(int argc, char **argv)
 
 
 
-	//выводим на экран картинку
+	//РІС‹РІРѕРґРёРј РЅР° СЌРєСЂР°РЅ РєР°СЂС‚РёРЅРєСѓ
 	/*void render(const int rowsCount,const int columnsCount,const char &buffer, const char &bufferColor) {
 
 
@@ -266,7 +269,7 @@ int charToInt(char chr)
 	return -1;
 }
 
-
+//
 void Initialize(HANDLE hOut) {
 	COORD cursorCoord;
 	cursorCoord.X = 0;
